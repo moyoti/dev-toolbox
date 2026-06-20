@@ -19,7 +19,10 @@ export const metadata: Metadata = {
     title: "Dev Toolbox - Developer Tools & Utilities",
     description: "Free online developer tools: JSON formatter, regex tester, color converter, Base64 codec, URL encoder, JWT decoder, and more. No sign-up required.",
     type: "website",
-    url: "https://devtoolbox.dev",
+    url: "https://dev-toolbox-zeta-gold.vercel.app",
+  },
+  verification: {
+    google: "IsWE9djwFQ2LdRb5or5sNx70HFwHHBUFgcsc3hMv_CQ",
   },
 };
 
