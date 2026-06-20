@@ -1,13 +1,20 @@
+"use client";
+
 import Sidebar from "@/components/Sidebar";
+import { useI18n } from "@/lib/i18n";
 
 interface ToolLayoutProps {
-  title: string;
+  titleKey: string;
   icon: string;
-  description: string;
+  descriptionKey: string;
   children: React.ReactNode;
 }
 
-export default function ToolLayout({ title, icon, description, children }: ToolLayoutProps) {
+export default function ToolLayout({ titleKey, icon, descriptionKey, children }: ToolLayoutProps) {
+  const { t, locale } = useI18n();
+  const title = t(titleKey);
+  const description = t(descriptionKey);
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -19,7 +26,7 @@ export default function ToolLayout({ title, icon, description, children }: ToolL
                 {icon}
               </div>
               <h1 className="font-mono text-xl font-bold tracking-wide text-foreground">
-                {title.toUpperCase()}
+                {locale === "zh" ? title : title.toUpperCase()}
               </h1>
             </div>
             <p className="text-sm text-muted-foreground">{description}</p>
