@@ -16,6 +16,12 @@ const tools = [
   "/diff",
   "/http-status",
   "/lorem",
+  "/markdown",
+  "/hash",
+  "/number-base",
+  "/gradient",
+  "/char-count",
+  "/html-entities",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
