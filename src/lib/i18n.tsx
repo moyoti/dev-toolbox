@@ -24,17 +24,24 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string {
   return typeof current === "string" ? current : path;
 }
 
+const localePrefixMap: Record<string, Locale> = {
+  zh: "zh", ja: "ja", ko: "ko", es: "es", fr: "fr", ru: "ru", de: "de",
+};
+
 function detectLocale(): Locale {
-  if (typeof navigator !== "undefined" && navigator.language.startsWith("zh")) {
-    return "zh";
+  if (typeof navigator !== "undefined") {
+    const prefix = navigator.language.split("-")[0];
+    if (prefix in localePrefixMap) return localePrefixMap[prefix];
   }
   return "en";
 }
 
+const validLocales: Locale[] = ["en", "zh", "ja", "ko", "es", "fr", "ru", "de"];
+
 function getStoredLocale(): Locale {
   if (typeof window === "undefined") return "en";
   const stored = localStorage.getItem("dev-toolbox-locale");
-  if (stored === "zh" || stored === "en") return stored;
+  if (stored && validLocales.includes(stored as Locale)) return stored as Locale;
   return detectLocale();
 }
 

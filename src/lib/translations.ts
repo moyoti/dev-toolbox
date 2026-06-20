@@ -1,4 +1,11 @@
-export type Locale = "en" | "zh";
+import ja from "./locales/ja";
+import ko from "./locales/ko";
+import es from "./locales/es";
+import fr from "./locales/fr";
+import ru from "./locales/ru";
+import de from "./locales/de";
+
+export type Locale = "en" | "zh" | "ja" | "ko" | "es" | "fr" | "ru" | "de";
 
 export const translations = {
   en: {
@@ -589,6 +596,12 @@ export const translations = {
       entityDesc: "说明",
     },
   },
+  ja,
+  ko,
+  es,
+  fr,
+  ru,
+  de,
 } as const;
 
 export type TranslationKeys = typeof translations.en;

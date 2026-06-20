@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import type { Locale } from "@/lib/translations";
 
 const tools = [
   { nameKey: "jsonFormatter.title", href: "/json-formatter", icon: "{ }" },
@@ -107,14 +108,24 @@ export default function Sidebar() {
           </Link>
         </div>
 
-        <div className="border-t border-border px-5 py-3 flex items-center justify-between">
-          <button
-            onClick={() => setLocale(locale === "en" ? "zh" : "en")}
-            className="flex items-center gap-2 rounded-sm border border-border bg-surface-raised px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
-          >
-            <span>🌐</span>
-            <span>{t("sidebar.language")}</span>
-          </button>
+        <div className="border-t border-border px-5 py-3">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-muted">🌐</span>
+            <select
+              value={locale}
+              onChange={(e) => setLocale(e.target.value as Locale)}
+              className="flex-1 rounded-sm border border-border bg-surface-raised px-2 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-accent/40 focus:border-accent focus:outline-none"
+            >
+              <option value="en">English</option>
+              <option value="zh">中文</option>
+              <option value="ja">日本語</option>
+              <option value="ko">한국어</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="ru">Русский</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
         </div>
 
         <div className="border-t border-border px-5 py-3">
