@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 type Lang = "html" | "css" | "js";
 
@@ -38,6 +39,7 @@ function minifyJs(input: string): string {
 }
 
 export default function CodeMinifier() {
+  const { t } = useI18n();
   const [lang, setLang] = useState<Lang>("html");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -75,9 +77,9 @@ export default function CodeMinifier() {
 
   return (
     <ToolLayout
-      title="Code Minifier"
+      titleKey="minifier.title"
       icon="min"
-      description="Minify HTML, CSS, and JavaScript code"
+      descriptionKey="minifier.description"
     >
       <div className="space-y-4">
         <div className="flex gap-2">
@@ -103,12 +105,12 @@ export default function CodeMinifier() {
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="flex flex-col gap-2">
             <label className="font-mono text-xs uppercase tracking-wider text-muted">
-              Input ({lang.toUpperCase()})
+              {t("minifier.inputLabel")} ({lang.toUpperCase()})
             </label>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={`Paste your ${lang.toUpperCase()} code here...`}
+              placeholder={t("minifier.inputPlaceholder")}
               className="min-h-[300px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
             />
             <div className="flex gap-2">
@@ -116,7 +118,7 @@ export default function CodeMinifier() {
                 onClick={minify}
                 className="flex-1 rounded-sm border border-accent bg-accent/10 px-4 py-2 font-mono text-xs uppercase tracking-wider text-accent transition-colors hover:bg-accent/20"
               >
-                Minify
+                {t("common.minify")}
               </button>
               <button
                 onClick={() => {
@@ -125,7 +127,7 @@ export default function CodeMinifier() {
                 }}
                 className="rounded-sm border border-border bg-surface-raised px-4 py-2 font-mono text-xs uppercase tracking-wider text-muted-foreground transition-colors hover:border-error/40 hover:text-error"
               >
-                Clear
+                {t("common.clear")}
               </button>
             </div>
           </div>
@@ -133,21 +135,21 @@ export default function CodeMinifier() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <label className="font-mono text-xs uppercase tracking-wider text-muted">
-                Minified Output
+                {t("minifier.minifiedOutput")}
               </label>
               {output && (
                 <button
                   onClick={copyOutput}
                   className="rounded-sm border border-border bg-surface-raised px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
                 >
-                  {copied ? "✓ Copied" : "Copy"}
+                  {copied ? t("common.copied") : t("common.copy")}
                 </button>
               )}
             </div>
             <textarea
               value={output}
               readOnly
-              placeholder="Minified output appears here..."
+              placeholder={t("minifier.outputPlaceholder")}
               className="min-h-[300px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:outline-none"
             />
           </div>
@@ -156,18 +158,18 @@ export default function CodeMinifier() {
         {output && (
           <div className="flex items-center gap-4 rounded-md border border-border bg-surface p-3">
             <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Stats
+              {t("common.stats")}
             </span>
             <span className="font-mono text-xs text-muted-foreground">
-              Original: {originalSize} bytes
+              {t("minifier.originalSize")}: {originalSize} {t("common.bytes")}
             </span>
             <span className="text-border">|</span>
             <span className="font-mono text-xs text-muted-foreground">
-              Minified: {minifiedSize} bytes
+              {t("minifier.minifiedSize")}: {minifiedSize} {t("common.bytes")}
             </span>
             <span className="text-border">|</span>
             <span className="font-mono text-xs text-success">
-              {savings}% saved
+              {savings}% {t("common.saved")}
             </span>
           </div>
         )}

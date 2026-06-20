@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 interface StatusEntry {
   code: number;
@@ -90,6 +91,7 @@ const groupColors: Record<string, string> = {
 };
 
 export default function HttpStatus() {
+  const { t } = useI18n();
   const [search, setSearch] = useState("");
   const [copiedCode, setCopiedCode] = useState<number | null>(null);
 
@@ -124,26 +126,26 @@ export default function HttpStatus() {
 
   return (
     <ToolLayout
-      title="HTTP Status"
+      titleKey="httpStatus.title"
       icon="HTTP"
-      description="Quick reference for HTTP status codes with search"
+      descriptionKey="httpStatus.description"
     >
       <div className="space-y-4">
         <div className="flex flex-col gap-1.5">
           <label className="font-mono text-[10px] uppercase tracking-wider text-muted">
-            Search
+            {t("httpStatus.search")}
           </label>
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by code, name, or description..."
+            placeholder={t("httpStatus.searchPlaceholder")}
             className="w-full rounded-sm border border-border bg-surface-raised px-4 py-2.5 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
           />
         </div>
 
         <div className="font-mono text-xs text-muted-foreground">
-          {filtered.length} status codes
+          {filtered.length} {t("httpStatus.statusCodes")}
         </div>
 
         <div className="space-y-6">
@@ -168,7 +170,7 @@ export default function HttpStatus() {
                           {entry.name}
                         </span>
                         <span className="font-mono text-[10px] text-accent opacity-0 transition-opacity group-hover:opacity-100">
-                          {copiedCode === entry.code ? "✓ Copied" : "Click to copy"}
+                          {copiedCode === entry.code ? t("common.copied") : t("common.clickToCopy")}
                         </span>
                       </div>
                       <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">

@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 type GenType = "paragraphs" | "sentences" | "words";
 
@@ -53,6 +54,7 @@ function generateParagraph(sentenceCount?: number): string {
 const classicOpening = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
 export default function LoremIpsum() {
+  const { t } = useI18n();
   const [genType, setGenType] = useState<GenType>("paragraphs");
   const [count, setCount] = useState(3);
   const [startWithLorem, setStartWithLorem] = useState(true);
@@ -123,29 +125,29 @@ export default function LoremIpsum() {
 
   return (
     <ToolLayout
-      title="Lorem Ipsum"
+      titleKey="lorem.title"
       icon="Lip"
-      description="Generate placeholder text for designs and layouts"
+      descriptionKey="lorem.description"
     >
       <div className="space-y-4">
         <div className="flex flex-wrap items-end gap-4">
           <div className="flex flex-col gap-1.5">
             <label className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Type
+              {t("lorem.type")}
             </label>
             <select
               value={genType}
               onChange={(e) => setGenType(e.target.value as GenType)}
               className="rounded-sm border border-border bg-surface-raised px-3 py-2 font-mono text-xs text-foreground"
             >
-              <option value="paragraphs">Paragraphs</option>
-              <option value="sentences">Sentences</option>
-              <option value="words">Words</option>
+              <option value="paragraphs">{t("lorem.paragraphs")}</option>
+              <option value="sentences">{t("lorem.sentences")}</option>
+              <option value="words">{t("lorem.words")}</option>
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Count
+              {t("lorem.count")}
             </label>
             <input
               type="number"
@@ -164,14 +166,14 @@ export default function LoremIpsum() {
               className="h-4 w-4 rounded-sm border-border accent-accent"
             />
             <span className="font-mono text-xs text-muted-foreground">
-              Start with &quot;Lorem ipsum...&quot;
+              {t("lorem.startWithLorem")}
             </span>
           </label>
           <button
             onClick={generate}
             className="rounded-sm border border-accent bg-accent/10 px-6 py-2 font-mono text-xs uppercase tracking-wider text-accent transition-colors hover:bg-accent/20"
           >
-            Generate
+            {t("common.generate")}
           </button>
         </div>
 
@@ -179,13 +181,13 @@ export default function LoremIpsum() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <label className="font-mono text-xs uppercase tracking-wider text-muted">
-                Output
+                {t("lorem.output")}
               </label>
               <button
                 onClick={copyOutput}
                 className="rounded-sm border border-border bg-surface-raised px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
               >
-                {copied ? "✓ Copied" : "Copy"}
+                {copied ? t("common.copied") : t("common.copy")}
               </button>
             </div>
             <div className="max-h-[500px] overflow-auto rounded-md border border-border bg-surface-raised p-4 font-mono text-sm leading-relaxed text-foreground">
@@ -193,14 +195,14 @@ export default function LoremIpsum() {
             </div>
             <div className="flex items-center gap-4 rounded-md border border-border bg-surface p-3">
               <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
-                Stats
+                {t("common.stats")}
               </span>
               <span className="font-mono text-xs text-muted-foreground">
-                {output.split(/\s+/).length} words
+                {output.split(/\s+/).length} {t("common.words")}
               </span>
               <span className="text-border">|</span>
               <span className="font-mono text-xs text-muted-foreground">
-                {output.length} chars
+                {output.length} {t("common.chars")}
               </span>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 function generateUUIDv4(): string {
   const bytes = new Uint8Array(16);
@@ -30,6 +31,7 @@ function formatUUID(uuid: string, format: Format): string {
 }
 
 export default function UuidGenerator() {
+  const { t } = useI18n();
   const [uuids, setUuids] = useState<string[]>([]);
   const [count, setCount] = useState(1);
   const [format, setFormat] = useState<Format>("lowercase-hyphen");
@@ -64,15 +66,15 @@ export default function UuidGenerator() {
 
   return (
     <ToolLayout
-      title="UUID Generator"
+      titleKey="uuid.title"
       icon="uid"
-      description="Generate random UUID v4 identifiers"
+      descriptionKey="uuid.description"
     >
       <div className="space-y-4">
         <div className="flex flex-wrap items-end gap-4">
           <div className="flex flex-col gap-1.5">
             <label className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Count
+              {t("uuid.count")}
             </label>
             <input
               type="number"
@@ -85,24 +87,24 @@ export default function UuidGenerator() {
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Format
+              {t("uuid.format")}
             </label>
             <select
               value={format}
               onChange={(e) => setFormat(e.target.value as Format)}
               className="rounded-sm border border-border bg-surface-raised px-3 py-2 font-mono text-xs text-foreground"
             >
-              <option value="lowercase-hyphen">lowercase + hyphens</option>
-              <option value="uppercase-hyphen">UPPERCASE + hyphens</option>
-              <option value="lowercase-no-hyphen">lowercase no hyphens</option>
-              <option value="uppercase-no-hyphen">UPPERCASE no hyphens</option>
+              <option value="lowercase-hyphen">{t("uuid.lowercaseHyphen")}</option>
+              <option value="uppercase-hyphen">{t("uuid.uppercaseHyphen")}</option>
+              <option value="lowercase-no-hyphen">{t("uuid.lowercaseNoHyphen")}</option>
+              <option value="uppercase-no-hyphen">{t("uuid.uppercaseNoHyphen")}</option>
             </select>
           </div>
           <button
             onClick={generate}
             className="rounded-sm border border-accent bg-accent/10 px-6 py-2 font-mono text-xs uppercase tracking-wider text-accent transition-colors hover:bg-accent/20"
           >
-            Generate
+            {t("common.generate")}
           </button>
         </div>
 
@@ -110,13 +112,13 @@ export default function UuidGenerator() {
           <>
             <div className="flex items-center justify-between">
               <span className="font-mono text-xs text-muted-foreground">
-                {uuids.length} UUID{uuids.length > 1 ? "s" : ""} generated
+                {uuids.length} UUID{uuids.length > 1 ? "s" : ""} {t("uuid.generated")}
               </span>
               <button
                 onClick={copyAll}
                 className="rounded-sm border border-border bg-surface-raised px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
               >
-                {copiedAll ? "✓ All Copied" : "Copy All"}
+                {copiedAll ? t("uuid.allCopied") : t("uuid.copyAll")}
               </button>
             </div>
             <div className="rounded-md border border-border bg-surface-raised p-4">
@@ -133,7 +135,7 @@ export default function UuidGenerator() {
                       onClick={() => copySingle(uuid, i)}
                       className="rounded-sm border border-border bg-surface-raised px-2 py-0.5 font-mono text-[10px] text-muted-foreground opacity-0 transition-all hover:border-accent/40 hover:text-accent group-hover:opacity-100"
                     >
-                      {copiedIndex === i ? "✓" : "Copy"}
+                      {copiedIndex === i ? "✓" : t("common.copy")}
                     </button>
                   </li>
                 ))}

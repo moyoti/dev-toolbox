@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 interface ColorValues {
   hex: string;
@@ -115,6 +116,7 @@ function rgbToHex(r: number, g: number, b: number): string {
 }
 
 export default function ColorConverter() {
+  const { t } = useI18n();
   const [color, setColor] = useState<ColorValues>(defaultColor);
   const [inputValue, setInputValue] = useState("#d97706");
   const [copiedField, setCopiedField] = useState("");
@@ -180,21 +182,21 @@ export default function ColorConverter() {
 
   return (
     <ToolLayout
-      title="Color Converter"
+      titleKey="colorConverter.title"
       icon="◆"
-      description="Convert between HEX, RGB, and HSL color formats in real-time"
+      descriptionKey="colorConverter.description"
     >
       <div className="space-y-4">
         <div className="flex flex-col gap-3 rounded-md border border-border bg-surface p-4">
           <label className="font-mono text-xs uppercase tracking-wider text-muted">
-            Color Input
+            {t("colorConverter.colorInput")}
           </label>
           <div className="flex gap-3">
             <input
               type="text"
               value={inputValue}
               onChange={(e) => handleInput(e.target.value)}
-              placeholder="#d97706, rgb(217, 119, 6), hsl(32, 95%, 44%)"
+              placeholder={t("colorConverter.placeholder")}
               className="flex-1 rounded-sm border border-border bg-surface-raised px-4 py-2.5 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
             />
             <input
@@ -210,7 +212,7 @@ export default function ColorConverter() {
             />
           </div>
           {!color.valid && inputValue && (
-            <p className="font-mono text-xs text-error">Invalid color format</p>
+            <p className="font-mono text-xs text-error">{t("colorConverter.invalidFormat")}</p>
           )}
         </div>
 
@@ -220,7 +222,7 @@ export default function ColorConverter() {
         >
           <div className="flex h-full items-end p-4">
             <span className="rounded-sm bg-black/60 px-2 py-1 font-mono text-xs text-white">
-              {color.valid ? color.hex.toUpperCase() : "Invalid"}
+              {color.valid ? color.hex.toUpperCase() : t("colorConverter.invalid")}
             </span>
           </div>
         </div>
@@ -241,7 +243,7 @@ export default function ColorConverter() {
                 onClick={() => copyValue(fmt.label, fmt.value)}
                 className="rounded-sm border border-border bg-surface-raised px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
               >
-                {copiedField === fmt.label ? "✓" : "Copy"}
+                {copiedField === fmt.label ? "✓" : t("common.copy")}
               </button>
             </div>
           ))}

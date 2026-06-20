@@ -2,10 +2,12 @@
 
 import { useState, useCallback } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 type Mode = "encode" | "decode";
 
 export default function Base64Codec() {
+  const { t } = useI18n();
   const [mode, setMode] = useState<Mode>("encode");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -26,11 +28,11 @@ export default function Base64Codec() {
           setOutput(decodeURIComponent(escape(atob(value.trim()))));
         }
       } catch {
-        setError(currentMode === "encode" ? "Failed to encode input" : "Invalid Base64 string");
+        setError(currentMode === "encode" ? t("base64.encodeFailed") : t("base64.decodeFailed"));
         setOutput("");
       }
     },
-    []
+    [t]
   );
 
   const handleInputChange = useCallback(
@@ -61,9 +63,9 @@ export default function Base64Codec() {
 
   return (
     <ToolLayout
-      title="Base64 Codec"
+      titleKey="base64.title"
       icon="b64"
-      description="Encode and decode Base64 strings instantly"
+      descriptionKey="base64.description"
     >
       <div className="space-y-4">
         <div className="flex gap-2">
@@ -75,7 +77,7 @@ export default function Base64Codec() {
                 : "border-border bg-surface-raised text-muted-foreground hover:border-border-focus hover:text-foreground"
             }`}
           >
-            Encode → Base64
+            {t("base64.encodeBtn")}
           </button>
           <button
             onClick={() => handleModeChange("decode")}
@@ -85,22 +87,22 @@ export default function Base64Codec() {
                 : "border-border bg-surface-raised text-muted-foreground hover:border-border-focus hover:text-foreground"
             }`}
           >
-            Decode ← Base64
+            {t("base64.decodeBtn")}
           </button>
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="flex flex-col gap-2">
             <label className="font-mono text-xs uppercase tracking-wider text-muted">
-              {mode === "encode" ? "Plain Text" : "Base64 String"}
+              {mode === "encode" ? t("base64.plainText") : t("base64.base64String")}
             </label>
             <textarea
               value={input}
               onChange={(e) => handleInputChange(e.target.value)}
               placeholder={
                 mode === "encode"
-                  ? "Enter text to encode..."
-                  : "Enter Base64 string to decode..."
+                  ? t("base64.encodePlaceholder")
+                  : t("base64.decodePlaceholder")
               }
               className="min-h-[280px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
             />
@@ -109,14 +111,14 @@ export default function Base64Codec() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <label className="font-mono text-xs uppercase tracking-wider text-muted">
-                {mode === "encode" ? "Base64 Output" : "Decoded Text"}
+                {mode === "encode" ? t("base64.base64Output") : t("base64.decodedText")}
               </label>
               {output && (
                 <button
                   onClick={copyOutput}
                   className="rounded-sm border border-border bg-surface-raised px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
                 >
-                  {copied ? "✓ Copied" : "Copy"}
+                  {copied ? t("common.copied") : t("common.copy")}
                 </button>
               )}
             </div>
@@ -128,7 +130,7 @@ export default function Base64Codec() {
               <textarea
                 value={output}
                 readOnly
-                placeholder="Output appears here..."
+                placeholder={t("base64.outputPlaceholder")}
                 className="min-h-[280px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:outline-none"
               />
             )}
@@ -138,20 +140,20 @@ export default function Base64Codec() {
         {output && (
           <div className="flex items-center gap-4 rounded-md border border-border bg-surface p-3">
             <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Stats
+              {t("common.stats")}
             </span>
             <span className="font-mono text-xs text-muted-foreground">
-              Input: {input.length} chars
+              {t("base64.inputChars")}: {input.length} {t("common.chars")}
             </span>
             <span className="text-border">|</span>
             <span className="font-mono text-xs text-muted-foreground">
-              Output: {output.length} chars
+              {t("base64.outputChars")}: {output.length} {t("common.chars")}
             </span>
             <span className="text-border">|</span>
             <span className="font-mono text-xs text-accent">
               {mode === "encode"
-                ? `${Math.round((output.length / input.length) * 100)}% size`
-                : `${Math.round((output.length / input.length) * 100)}% recovered`}
+                ? `${Math.round((output.length / input.length) * 100)}% ${t("common.size")}`
+                : `${Math.round((output.length / input.length) * 100)}% ${t("common.recovered")}`}
             </span>
           </div>
         )}

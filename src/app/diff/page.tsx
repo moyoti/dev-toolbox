@@ -3,8 +3,10 @@
 import { useState, useMemo } from "react";
 import * as Diff from "diff";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 export default function DiffCompare() {
+  const { t } = useI18n();
   const [leftText, setLeftText] = useState("");
   const [rightText, setRightText] = useState("");
 
@@ -96,47 +98,47 @@ export default function DiffCompare() {
 
   return (
     <ToolLayout
-      title="Diff Compare"
+      titleKey="diff.title"
       icon="±"
-      description="Compare two texts side-by-side with diff highlighting"
+      descriptionKey="diff.description"
     >
       <div className="space-y-4">
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <label className="font-mono text-xs uppercase tracking-wider text-muted">
-                Original
+                {t("diff.original")}
               </label>
               <button
                 onClick={() => setLeftText("")}
                 className="rounded-sm border border-border bg-surface-raised px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:text-foreground"
               >
-                Clear
+                {t("common.clear")}
               </button>
             </div>
             <textarea
               value={leftText}
               onChange={(e) => setLeftText(e.target.value)}
-              placeholder="Paste original text here..."
+              placeholder={t("diff.originalPlaceholder")}
               className="min-h-[200px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
             />
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <label className="font-mono text-xs uppercase tracking-wider text-muted">
-                Modified
+                {t("diff.modified")}
               </label>
               <button
                 onClick={() => setRightText("")}
                 className="rounded-sm border border-border bg-surface-raised px-2 py-0.5 font-mono text-[10px] text-muted-foreground hover:text-foreground"
               >
-                Clear
+                {t("common.clear")}
               </button>
             </div>
             <textarea
               value={rightText}
               onChange={(e) => setRightText(e.target.value)}
-              placeholder="Paste modified text here..."
+              placeholder={t("diff.modifiedPlaceholder")}
               className="min-h-[200px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
             />
           </div>
@@ -145,7 +147,7 @@ export default function DiffCompare() {
         {(leftText || rightText) && (
           <div className="flex items-center gap-4 rounded-md border border-border bg-surface p-3">
             <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Summary
+              {t("diff.summary")}
             </span>
             <span className="flex items-center gap-1 font-mono text-xs text-success">
               <span className="inline-block h-2 w-2 rounded-sm bg-success" />
@@ -157,7 +159,7 @@ export default function DiffCompare() {
             </span>
             <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
               <span className="inline-block h-2 w-2 rounded-sm bg-muted" />
-              {stats.unchanged} unchanged
+              {stats.unchanged} {t("diff.unchanged")}
             </span>
           </div>
         )}
@@ -167,28 +169,28 @@ export default function DiffCompare() {
             <div className="border-r border-border bg-surface-raised">
               <div className="border-b border-border bg-surface px-3 py-1.5">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
-                  Original
+                  {t("diff.original")}
                 </span>
               </div>
               <div className="max-h-[400px] overflow-auto">
                 {leftLines.length > 0 ? (
                   leftLines.map((line, i) => renderLine(line, "left", i))
                 ) : (
-                  <div className="p-4 font-mono text-xs text-muted">No content</div>
+                  <div className="p-4 font-mono text-xs text-muted">{t("common.noContent")}</div>
                 )}
               </div>
             </div>
             <div className="bg-surface-raised">
               <div className="border-b border-border bg-surface px-3 py-1.5">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
-                  Modified
+                  {t("diff.modified")}
                 </span>
               </div>
               <div className="max-h-[400px] overflow-auto">
                 {rightLines.length > 0 ? (
                   rightLines.map((line, i) => renderLine(line, "right", i))
                 ) : (
-                  <div className="p-4 font-mono text-xs text-muted">No content</div>
+                  <div className="p-4 font-mono text-xs text-muted">{t("common.noContent")}</div>
                 )}
               </div>
             </div>

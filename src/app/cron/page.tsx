@@ -2,16 +2,9 @@
 
 import { useState, useCallback, useEffect } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 type CronField = "minute" | "hour" | "dayOfMonth" | "month" | "dayOfWeek";
-
-const fieldLabels: Record<CronField, string> = {
-  minute: "Minute",
-  hour: "Hour",
-  dayOfMonth: "Day (Month)",
-  month: "Month",
-  dayOfWeek: "Day (Week)",
-};
 
 const fieldRanges: Record<CronField, { min: number; max: number }> = {
   minute: { min: 0, max: 59 },
@@ -23,14 +16,6 @@ const fieldRanges: Record<CronField, { min: number; max: number }> = {
 
 const dayOfWeekNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const monthNames = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-const presets: { label: string; values: Record<CronField, string> }[] = [
-  { label: "Every minute", values: { minute: "*", hour: "*", dayOfMonth: "*", month: "*", dayOfWeek: "*" } },
-  { label: "Every hour", values: { minute: "0", hour: "*", dayOfMonth: "*", month: "*", dayOfWeek: "*" } },
-  { label: "Daily at midnight", values: { minute: "0", hour: "0", dayOfMonth: "*", month: "*", dayOfWeek: "*" } },
-  { label: "Every Monday", values: { minute: "0", hour: "0", dayOfMonth: "*", month: "*", dayOfWeek: "1" } },
-  { label: "Weekdays at 9am", values: { minute: "0", hour: "9", dayOfMonth: "*", month: "*", dayOfWeek: "1-5" } },
-];
 
 function describeCron(fields: Record<CronField, string>): string {
   const { minute, hour, dayOfMonth, month, dayOfWeek } = fields;
@@ -107,6 +92,7 @@ function getNextRuns(fields: Record<CronField, string>, count: number): Date[] {
 }
 
 export default function CronGenerator() {
+  const { t } = useI18n();
   const [fields, setFields] = useState<Record<CronField, string>>({
     minute: "*",
     hour: "*",
@@ -119,13 +105,29 @@ export default function CronGenerator() {
   const cronExpression = `${fields.minute} ${fields.hour} ${fields.dayOfMonth} ${fields.month} ${fields.dayOfWeek}`;
   const description = describeCron(fields);
 
+  const fieldLabels: Record<CronField, string> = {
+    minute: t("cron.minute"),
+    hour: t("cron.hour"),
+    dayOfMonth: t("cron.dayOfMonth"),
+    month: t("cron.month"),
+    dayOfWeek: t("cron.dayOfWeek"),
+  };
+
+  const presets: { label: string; values: Record<CronField, string> }[] = [
+    { label: t("cron.everyMinute"), values: { minute: "*", hour: "*", dayOfMonth: "*", month: "*", dayOfWeek: "*" } },
+    { label: t("cron.everyHour"), values: { minute: "0", hour: "*", dayOfMonth: "*", month: "*", dayOfWeek: "*" } },
+    { label: t("cron.dailyMidnight"), values: { minute: "0", hour: "0", dayOfMonth: "*", month: "*", dayOfWeek: "*" } },
+    { label: t("cron.everyMonday"), values: { minute: "0", hour: "0", dayOfMonth: "*", month: "*", dayOfWeek: "1" } },
+    { label: t("cron.weekdays9am"), values: { minute: "0", hour: "9", dayOfMonth: "*", month: "*", dayOfWeek: "1-5" } },
+  ];
+
   const updateField = useCallback((field: CronField, value: string) => {
     setFields((prev) => ({ ...prev, [field]: value }));
   }, []);
 
   const applyPreset = useCallback((preset: typeof presets[number]) => {
     setFields(preset.values);
-  }, []);
+  }, [presets]);
 
   useEffect(() => {
     setNextRuns(getNextRuns(fields, 5));
@@ -133,14 +135,14 @@ export default function CronGenerator() {
 
   return (
     <ToolLayout
-      title="Cron Generator"
+      titleKey="cron.title"
       icon="⌁"
-      description="Build and preview cron expressions with human-readable descriptions"
+      descriptionKey="cron.description"
     >
       <div className="space-y-6">
         <div className="rounded-md border border-border bg-surface p-5">
           <div className="mb-3 font-mono text-[10px] uppercase tracking-wider text-muted">
-            Generated Expression
+            {t("cron.generatedExpression")}
           </div>
           <div className="flex items-center gap-3">
             <code className="flex-1 rounded-sm border border-accent/30 bg-accent/5 px-4 py-3 font-mono text-lg text-accent">
@@ -172,7 +174,7 @@ export default function CronGenerator() {
 
         <div>
           <div className="mb-2 font-mono text-[10px] uppercase tracking-wider text-muted">
-            Presets
+            {t("cron.presets")}
           </div>
           <div className="flex flex-wrap gap-2">
             {presets.map((preset) => (
@@ -190,7 +192,7 @@ export default function CronGenerator() {
         {nextRuns.length > 0 && (
           <div>
             <div className="mb-2 font-mono text-[10px] uppercase tracking-wider text-muted">
-              Next 5 Run Times
+              {t("cron.nextRuns")}
             </div>
             <div className="rounded-md border border-border bg-surface-raised p-4">
               <ul className="space-y-1.5">

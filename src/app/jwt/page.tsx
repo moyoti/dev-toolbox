@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 interface JwtPart {
   header: string;
@@ -10,6 +11,7 @@ interface JwtPart {
 }
 
 export default function JwtDecoder() {
+  const { t } = useI18n();
   const [input, setInput] = useState("");
   const [decoded, setDecoded] = useState<JwtPart | null>(null);
   const [error, setError] = useState("");
@@ -22,7 +24,7 @@ export default function JwtDecoder() {
 
     const parts = input.trim().split(".");
     if (parts.length !== 3) {
-      setError("Invalid JWT: must have 3 parts separated by dots");
+      setError(t("jwt.invalidJwt"));
       return;
     }
 
@@ -35,9 +37,9 @@ export default function JwtDecoder() {
         signature: parts[2],
       });
     } catch {
-      setError("Failed to decode JWT: invalid Base64 or malformed token");
+      setError(t("jwt.failedDecode"));
     }
-  }, [input]);
+  }, [input, t]);
 
   const copySection = useCallback((section: string, label: string) => {
     navigator.clipboard.writeText(section);
@@ -47,19 +49,19 @@ export default function JwtDecoder() {
 
   return (
     <ToolLayout
-      title="JWT Decoder"
+      titleKey="jwt.title"
       icon="◉"
-      description="Decode and inspect JSON Web Tokens"
+      descriptionKey="jwt.description"
     >
       <div className="space-y-4">
         <div className="flex flex-col gap-2">
           <label className="font-mono text-xs uppercase tracking-wider text-muted">
-            JWT Token
+            {t("jwt.jwtToken")}
           </label>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Paste your JWT token here (e.g. eyJhbGciOi...)"
+            placeholder={t("jwt.placeholder")}
             className="min-h-[120px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
           />
           <div className="flex gap-2">
@@ -67,7 +69,7 @@ export default function JwtDecoder() {
               onClick={decodeJwt}
               className="flex-1 rounded-sm border border-accent bg-accent/10 px-4 py-2 font-mono text-xs uppercase tracking-wider text-accent transition-colors hover:bg-accent/20"
             >
-              Decode
+              {t("jwt.decode")}
             </button>
             <button
               onClick={() => {
@@ -77,7 +79,7 @@ export default function JwtDecoder() {
               }}
               className="rounded-sm border border-border bg-surface-raised px-4 py-2 font-mono text-xs uppercase tracking-wider text-muted-foreground transition-colors hover:border-error/40 hover:text-error"
             >
-              Clear
+              {t("common.clear")}
             </button>
           </div>
         </div>
@@ -85,7 +87,7 @@ export default function JwtDecoder() {
         {error && (
           <div className="rounded-md border border-error/40 bg-error-muted/20 p-4">
             <p className="mb-1 font-mono text-xs uppercase tracking-wider text-error">
-              Decode Error
+              {t("jwt.decodeError")}
             </p>
             <p className="font-mono text-sm text-error/80">{error}</p>
           </div>
@@ -96,13 +98,13 @@ export default function JwtDecoder() {
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <label className="font-mono text-xs uppercase tracking-wider text-error">
-                  Header
+                  {t("jwt.header")}
                 </label>
                 <button
                   onClick={() => copySection(decoded.header, "header")}
                   className="rounded-sm border border-border bg-surface-raised px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
                 >
-                  {copiedSection === "header" ? "✓ Copied" : "Copy"}
+                  {copiedSection === "header" ? t("common.copied") : t("common.copy")}
                 </button>
               </div>
               <pre className="min-h-[160px] overflow-auto rounded-md border border-error/30 bg-surface-raised p-4 font-mono text-sm leading-relaxed text-foreground">
@@ -113,13 +115,13 @@ export default function JwtDecoder() {
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <label className="font-mono text-xs uppercase tracking-wider text-info">
-                  Payload
+                  {t("jwt.payload")}
                 </label>
                 <button
                   onClick={() => copySection(decoded.payload, "payload")}
                   className="rounded-sm border border-border bg-surface-raised px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
                 >
-                  {copiedSection === "payload" ? "✓ Copied" : "Copy"}
+                  {copiedSection === "payload" ? t("common.copied") : t("common.copy")}
                 </button>
               </div>
               <pre className="min-h-[160px] overflow-auto rounded-md border border-info/30 bg-surface-raised p-4 font-mono text-sm leading-relaxed text-foreground">
@@ -130,13 +132,13 @@ export default function JwtDecoder() {
             <div className="flex flex-col gap-2 lg:col-span-2">
               <div className="flex items-center justify-between">
                 <label className="font-mono text-xs uppercase tracking-wider text-muted">
-                  Signature
+                  {t("jwt.signature")}
                 </label>
                 <button
                   onClick={() => copySection(decoded.signature, "signature")}
                   className="rounded-sm border border-border bg-surface-raised px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
                 >
-                  {copiedSection === "signature" ? "✓ Copied" : "Copy"}
+                  {copiedSection === "signature" ? t("common.copied") : t("common.copy")}
                 </button>
               </div>
               <pre className="overflow-auto rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-muted-foreground">

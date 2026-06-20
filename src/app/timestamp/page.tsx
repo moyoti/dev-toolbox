@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 export default function TimestampConverter() {
+  const { t } = useI18n();
   const [now, setNow] = useState(Math.floor(Date.now() / 1000));
   const [timestampInput, setTimestampInput] = useState("");
   const [dateOutput, setDateOutput] = useState("");
@@ -28,13 +30,13 @@ export default function TimestampConverter() {
       }
       const num = Number(value);
       if (isNaN(num)) {
-        setDateOutput("Invalid timestamp");
+        setDateOutput(t("timestamp.invalidTimestamp"));
         return;
       }
       const ms = useMilliseconds ? num : num * 1000;
       const date = new Date(ms);
       if (isNaN(date.getTime())) {
-        setDateOutput("Invalid timestamp");
+        setDateOutput(t("timestamp.invalidTimestamp"));
         return;
       }
       setDateOutput(
@@ -50,7 +52,7 @@ export default function TimestampConverter() {
         })
       );
     },
-    [useMilliseconds]
+    [useMilliseconds, t]
   );
 
   const convertDate = useCallback((value: string) => {
@@ -61,11 +63,11 @@ export default function TimestampConverter() {
     }
     const date = new Date(value);
     if (isNaN(date.getTime())) {
-      setTsOutput("Invalid date");
+      setTsOutput(t("timestamp.invalidDate"));
       return;
     }
     setTsOutput(Math.floor(date.getTime() / 1000).toString());
-  }, []);
+  }, [t]);
 
   const copyValue = useCallback((field: string, value: string) => {
     navigator.clipboard.writeText(value);
@@ -87,15 +89,15 @@ export default function TimestampConverter() {
 
   return (
     <ToolLayout
-      title="Timestamp"
+      titleKey="timestamp.title"
       icon="⏱"
-      description="Convert between Unix timestamps and human-readable dates"
+      descriptionKey="timestamp.description"
     >
       <div className="space-y-4">
         <div className="flex items-center justify-between rounded-md border border-accent/30 bg-accent-glow p-4">
           <div>
             <span className="font-mono text-[10px] uppercase tracking-wider text-accent">
-              Current Unix Timestamp
+              {t("timestamp.currentUnix")}
             </span>
             <p className="mt-1 font-mono text-2xl font-bold text-foreground">{now}</p>
           </div>
@@ -111,7 +113,7 @@ export default function TimestampConverter() {
 
         <div className="flex items-center gap-3">
           <label className="font-mono text-xs uppercase tracking-wider text-muted">
-            Unit:
+            {t("timestamp.unit")}
           </label>
           <button
             onClick={() => setUseMilliseconds(false)}
@@ -121,7 +123,7 @@ export default function TimestampConverter() {
                 : "border-border bg-surface-raised text-muted-foreground hover:text-foreground"
             }`}
           >
-            Seconds
+            {t("timestamp.seconds")}
           </button>
           <button
             onClick={() => setUseMilliseconds(true)}
@@ -131,7 +133,7 @@ export default function TimestampConverter() {
                 : "border-border bg-surface-raised text-muted-foreground hover:text-foreground"
             }`}
           >
-            Milliseconds
+            {t("timestamp.milliseconds")}
           </button>
         </div>
 
@@ -139,37 +141,37 @@ export default function TimestampConverter() {
           <div className="flex flex-col gap-3 rounded-md border border-border bg-surface p-4">
             <div className="flex items-center justify-between">
               <span className="font-mono text-xs uppercase tracking-wider text-muted">
-                Timestamp → Date
+                {t("timestamp.tsToDate")}
               </span>
               <button
                 onClick={setCurrentTimestamp}
                 className="rounded-sm border border-border bg-surface-raised px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
               >
-                Now
+                {t("timestamp.now")}
               </button>
             </div>
             <input
               type="text"
               value={timestampInput}
               onChange={(e) => convertTimestamp(e.target.value)}
-              placeholder={`Enter ${useMilliseconds ? "millisecond" : "second"} timestamp...`}
+              placeholder={useMilliseconds ? t("timestamp.millisecondPlaceholder") : t("timestamp.secondPlaceholder")}
               className="w-full rounded-sm border border-border bg-surface-raised px-4 py-2.5 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
             />
             {dateOutput && (
               <div className="flex items-start justify-between gap-2 rounded-sm bg-surface-raised p-3">
                 <p
                   className={`font-mono text-sm ${
-                    dateOutput === "Invalid timestamp" ? "text-error" : "text-foreground"
+                    dateOutput === t("timestamp.invalidTimestamp") ? "text-error" : "text-foreground"
                   }`}
                 >
                   {dateOutput}
                 </p>
-                {dateOutput !== "Invalid timestamp" && (
+                {dateOutput !== t("timestamp.invalidTimestamp") && (
                   <button
                     onClick={() => copyValue("ts2date", dateOutput)}
                     className="shrink-0 rounded-sm border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground hover:text-accent"
                   >
-                    {copiedField === "ts2date" ? "✓" : "Copy"}
+                    {copiedField === "ts2date" ? "✓" : t("common.copy")}
                   </button>
                 )}
               </div>
@@ -179,13 +181,13 @@ export default function TimestampConverter() {
           <div className="flex flex-col gap-3 rounded-md border border-border bg-surface p-4">
             <div className="flex items-center justify-between">
               <span className="font-mono text-xs uppercase tracking-wider text-muted">
-                Date → Timestamp
+                {t("timestamp.dateToTs")}
               </span>
               <button
                 onClick={setCurrentDate}
                 className="rounded-sm border border-border bg-surface-raised px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
               >
-                Now
+                {t("timestamp.now")}
               </button>
             </div>
             <input
@@ -198,17 +200,17 @@ export default function TimestampConverter() {
               <div className="flex items-start justify-between gap-2 rounded-sm bg-surface-raised p-3">
                 <p
                   className={`font-mono text-sm ${
-                    tsOutput === "Invalid date" ? "text-error" : "text-foreground"
+                    tsOutput === t("timestamp.invalidDate") ? "text-error" : "text-foreground"
                   }`}
                 >
                   {tsOutput}
                 </p>
-                {tsOutput !== "Invalid date" && (
+                {tsOutput !== t("timestamp.invalidDate") && (
                   <button
                     onClick={() => copyValue("date2ts", tsOutput)}
                     className="shrink-0 rounded-sm border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground hover:text-accent"
                   >
-                    {copiedField === "date2ts" ? "✓" : "Copy"}
+                    {copiedField === "date2ts" ? "✓" : t("common.copy")}
                   </button>
                 )}
               </div>
@@ -218,13 +220,13 @@ export default function TimestampConverter() {
 
         <div className="rounded-md border border-border bg-surface p-4">
           <span className="font-mono text-xs uppercase tracking-wider text-muted">
-            Quick Reference
+            {t("timestamp.quickRef")}
           </span>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
             {[
-              { label: "1 hour ago", value: Math.floor(Date.now() / 1000) - 3600 },
-              { label: "24 hours ago", value: Math.floor(Date.now() / 1000) - 86400 },
-              { label: "1 week ago", value: Math.floor(Date.now() / 1000) - 604800 },
+              { label: t("timestamp.hourAgo"), value: Math.floor(Date.now() / 1000) - 3600 },
+              { label: t("timestamp.hoursAgo"), value: Math.floor(Date.now() / 1000) - 86400 },
+              { label: t("timestamp.weekAgo"), value: Math.floor(Date.now() / 1000) - 604800 },
             ].map((ref) => (
               <button
                 key={ref.label}

@@ -2,8 +2,10 @@
 
 import { useState, useCallback } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 export default function JsonFormatter() {
+  const { t } = useI18n();
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
@@ -19,10 +21,10 @@ export default function JsonFormatter() {
       const parsed = JSON.parse(input);
       setOutput(JSON.stringify(parsed, null, indent));
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Invalid JSON");
+      setError(e instanceof Error ? e.message : t("jsonFormatter.invalidJson"));
       setOutput("");
     }
-  }, [input, indent]);
+  }, [input, indent, t]);
 
   const minifyJson = useCallback(() => {
     setError("");
@@ -34,10 +36,10 @@ export default function JsonFormatter() {
       const parsed = JSON.parse(input);
       setOutput(JSON.stringify(parsed));
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Invalid JSON");
+      setError(e instanceof Error ? e.message : t("jsonFormatter.invalidJson"));
       setOutput("");
     }
-  }, [input]);
+  }, [input, t]);
 
   const copyOutput = useCallback(() => {
     if (output) {
@@ -64,18 +66,18 @@ export default function JsonFormatter() {
 
   return (
     <ToolLayout
-      title="JSON Formatter"
+      titleKey="jsonFormatter.title"
       icon="{ }"
-      description="Format, minify, and validate JSON with syntax highlighting"
+      descriptionKey="jsonFormatter.description"
     >
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <label className="font-mono text-xs uppercase tracking-wider text-muted">
-              Input
+              {t("jsonFormatter.input")}
             </label>
             <div className="flex items-center gap-2">
-              <label className="font-mono text-[10px] text-muted">Indent:</label>
+              <label className="font-mono text-[10px] text-muted">{t("jsonFormatter.indent")}</label>
               <select
                 value={indent}
                 onChange={(e) => setIndent(Number(e.target.value))}
@@ -90,7 +92,7 @@ export default function JsonFormatter() {
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder='Paste your JSON here... e.g. {"key": "value"}'
+            placeholder={t("jsonFormatter.placeholder")}
             className="min-h-[360px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
           />
           <div className="flex gap-2">
@@ -98,13 +100,13 @@ export default function JsonFormatter() {
               onClick={formatJson}
               className="flex-1 rounded-sm border border-accent bg-accent/10 px-4 py-2 font-mono text-xs uppercase tracking-wider text-accent transition-colors hover:bg-accent/20"
             >
-              Format
+              {t("common.format")}
             </button>
             <button
               onClick={minifyJson}
               className="flex-1 rounded-sm border border-border bg-surface-raised px-4 py-2 font-mono text-xs uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-foreground"
             >
-              Minify
+              {t("common.minify")}
             </button>
             <button
               onClick={() => {
@@ -114,7 +116,7 @@ export default function JsonFormatter() {
               }}
               className="rounded-sm border border-border bg-surface-raised px-4 py-2 font-mono text-xs uppercase tracking-wider text-muted-foreground transition-colors hover:border-error/40 hover:text-error"
             >
-              Clear
+              {t("common.clear")}
             </button>
           </div>
         </div>
@@ -122,21 +124,21 @@ export default function JsonFormatter() {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <label className="font-mono text-xs uppercase tracking-wider text-muted">
-              Output
+              {t("jsonFormatter.output")}
             </label>
             {output && (
               <button
                 onClick={copyOutput}
                 className="rounded-sm border border-border bg-surface-raised px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
               >
-                Copy
+                {t("common.copy")}
               </button>
             )}
           </div>
           {error ? (
             <div className="min-h-[360px] rounded-md border border-error/40 bg-error-muted/20 p-4">
               <p className="mb-1 font-mono text-xs uppercase tracking-wider text-error">
-                Parse Error
+                {t("jsonFormatter.parseError")}
               </p>
               <p className="font-mono text-sm text-error/80">{error}</p>
             </div>
@@ -147,7 +149,7 @@ export default function JsonFormatter() {
                 output ? { __html: syntaxHighlight(output) } : undefined
               }
             >
-              {output ? null : '<span class="text-muted">Formatted output appears here...</span>'}
+              {output ? null : `<span class="text-muted">${t("jsonFormatter.outputPlaceholder")}</span>`}
             </pre>
           )}
         </div>

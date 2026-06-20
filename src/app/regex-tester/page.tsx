@@ -2,8 +2,10 @@
 
 import { useState, useMemo } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 export default function RegexTester() {
+  const { t } = useI18n();
   const [pattern, setPattern] = useState("");
   const [testString, setTestString] = useState("");
   const [flags, setFlags] = useState({ g: true, i: false, m: false, s: false });
@@ -76,10 +78,10 @@ export default function RegexTester() {
         matches: [],
         groups: [],
         highlighted: testString.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
-        error: e instanceof Error ? e.message : "Invalid regex",
+        error: e instanceof Error ? e.message : t("regexTester.invalidRegex"),
       };
     }
-  }, [pattern, testString, flagString]);
+  }, [pattern, testString, flagString, t]);
 
   const toggleFlag = (flag: keyof typeof flags) => {
     setFlags((prev) => ({ ...prev, [flag]: !prev[flag] }));
@@ -87,9 +89,9 @@ export default function RegexTester() {
 
   return (
     <ToolLayout
-      title="Regex Tester"
+      titleKey="regexTester.title"
       icon=".*"
-      description="Test regex patterns with live match highlighting and capture groups"
+      descriptionKey="regexTester.description"
     >
       <div className="space-y-4">
         <div className="flex flex-col gap-3 rounded-md border border-border bg-surface p-4">
@@ -99,7 +101,7 @@ export default function RegexTester() {
               type="text"
               value={pattern}
               onChange={(e) => setPattern(e.target.value)}
-              placeholder="Enter regex pattern..."
+              placeholder={t("regexTester.pattern")}
               className="flex-1 border-none bg-transparent font-mono text-sm text-foreground placeholder:text-muted focus:outline-none"
             />
             <span className="font-mono text-lg text-muted">/</span>
@@ -128,22 +130,22 @@ export default function RegexTester() {
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="flex flex-col gap-2">
             <label className="font-mono text-xs uppercase tracking-wider text-muted">
-              Test String
+              {t("regexTester.testString")}
             </label>
             <textarea
               value={testString}
               onChange={(e) => setTestString(e.target.value)}
-              placeholder="Enter test string..."
+              placeholder={t("regexTester.pattern")}
               className="min-h-[240px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
             />
           </div>
           <div className="flex flex-col gap-2">
             <label className="font-mono text-xs uppercase tracking-wider text-muted">
-              Match Result
+              {t("regexTester.matchResult")}
             </label>
             <div
               className="min-h-[240px] overflow-auto rounded-md border border-border bg-surface-raised p-4 font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{ __html: result.highlighted || '<span class="text-muted">Matches appear here...</span>' }}
+              dangerouslySetInnerHTML={{ __html: result.highlighted || `<span class="text-muted">${t("regexTester.matchPlaceholder")}</span>` }}
             />
           </div>
         </div>
@@ -151,7 +153,7 @@ export default function RegexTester() {
         <div className="rounded-md border border-border bg-surface p-4">
           <div className="flex items-center justify-between mb-3">
             <span className="font-mono text-xs uppercase tracking-wider text-muted">
-              Matches
+              {t("regexTester.matches")}
             </span>
             <span className="rounded-sm bg-accent/10 px-2 py-0.5 font-mono text-xs text-accent">
               {result.matches.length}
@@ -166,19 +168,19 @@ export default function RegexTester() {
                 >
                   <span className="font-mono text-[10px] text-muted">#{i + 1}</span>
                   <span className="font-mono text-sm text-accent">&quot;{m.full}&quot;</span>
-                  <span className="font-mono text-[10px] text-muted">index: {m.index}</span>
+                  <span className="font-mono text-[10px] text-muted">{t("regexTester.index")}: {m.index}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="font-mono text-xs text-muted">No matches found</p>
+            <p className="font-mono text-xs text-muted">{t("regexTester.noMatches")}</p>
           )}
         </div>
 
         {result.groups.length > 0 && (
           <div className="rounded-md border border-border bg-surface p-4">
             <span className="font-mono text-xs uppercase tracking-wider text-muted">
-              Capture Groups
+              {t("regexTester.captureGroups")}
             </span>
             <div className="mt-3 space-y-1">
               {result.groups.map((g, i) => (

@@ -2,10 +2,12 @@
 
 import { useState, useCallback } from "react";
 import ToolLayout from "@/components/ToolLayout";
+import { useI18n } from "@/lib/i18n";
 
 type Mode = "encode" | "decode";
 
 export default function UrlCodec() {
+  const { t } = useI18n();
   const [mode, setMode] = useState<Mode>("encode");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -26,11 +28,11 @@ export default function UrlCodec() {
           setOutput(decodeURIComponent(value));
         }
       } catch {
-        setError(currentMode === "encode" ? "Failed to encode input" : "Invalid URL-encoded string");
+        setError(currentMode === "encode" ? t("url.encodeFailed") : t("url.decodeFailed"));
         setOutput("");
       }
     },
-    []
+    [t]
   );
 
   const handleInputChange = useCallback(
@@ -61,9 +63,9 @@ export default function UrlCodec() {
 
   return (
     <ToolLayout
-      title="URL Codec"
+      titleKey="url.title"
       icon="%2"
-      description="Encode and decode URL components instantly"
+      descriptionKey="url.description"
     >
       <div className="space-y-4">
         <div className="flex gap-2">
@@ -75,7 +77,7 @@ export default function UrlCodec() {
                 : "border-border bg-surface-raised text-muted-foreground hover:border-border-focus hover:text-foreground"
             }`}
           >
-            Encode → URL
+            {t("url.encodeBtn")}
           </button>
           <button
             onClick={() => handleModeChange("decode")}
@@ -85,22 +87,22 @@ export default function UrlCodec() {
                 : "border-border bg-surface-raised text-muted-foreground hover:border-border-focus hover:text-foreground"
             }`}
           >
-            Decode ← URL
+            {t("url.decodeBtn")}
           </button>
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="flex flex-col gap-2">
             <label className="font-mono text-xs uppercase tracking-wider text-muted">
-              {mode === "encode" ? "Plain Text" : "URL-Encoded String"}
+              {mode === "encode" ? t("url.plainText") : t("url.encodedString")}
             </label>
             <textarea
               value={input}
               onChange={(e) => handleInputChange(e.target.value)}
               placeholder={
                 mode === "encode"
-                  ? "Enter text to URL encode..."
-                  : "Enter URL-encoded string to decode..."
+                  ? t("url.encodePlaceholder")
+                  : t("url.decodePlaceholder")
               }
               className="min-h-[280px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
             />
@@ -109,14 +111,14 @@ export default function UrlCodec() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <label className="font-mono text-xs uppercase tracking-wider text-muted">
-                {mode === "encode" ? "URL-Encoded Output" : "Decoded Text"}
+                {mode === "encode" ? t("url.encodedOutput") : t("url.decodedText")}
               </label>
               {output && (
                 <button
                   onClick={copyOutput}
                   className="rounded-sm border border-border bg-surface-raised px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
                 >
-                  {copied ? "✓ Copied" : "Copy"}
+                  {copied ? t("common.copied") : t("common.copy")}
                 </button>
               )}
             </div>
@@ -128,7 +130,7 @@ export default function UrlCodec() {
               <textarea
                 value={output}
                 readOnly
-                placeholder="Output appears here..."
+                placeholder={t("url.outputPlaceholder")}
                 className="min-h-[280px] w-full resize-y rounded-md border border-border bg-surface-raised p-4 font-mono text-sm text-foreground placeholder:text-muted focus:outline-none"
               />
             )}
@@ -138,20 +140,20 @@ export default function UrlCodec() {
         {output && (
           <div className="flex items-center gap-4 rounded-md border border-border bg-surface p-3">
             <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Stats
+              {t("common.stats")}
             </span>
             <span className="font-mono text-xs text-muted-foreground">
-              Input: {input.length} chars
+              {t("url.inputChars")}: {input.length} {t("common.chars")}
             </span>
             <span className="text-border">|</span>
             <span className="font-mono text-xs text-muted-foreground">
-              Output: {output.length} chars
+              {t("url.outputChars")}: {output.length} {t("common.chars")}
             </span>
             <span className="text-border">|</span>
             <span className="font-mono text-xs text-accent">
               {mode === "encode"
-                ? `${Math.round((output.length / input.length) * 100)}% size`
-                : `${Math.round((output.length / input.length) * 100)}% recovered`}
+                ? `${Math.round((output.length / input.length) * 100)}% ${t("common.size")}`
+                : `${Math.round((output.length / input.length) * 100)}% ${t("common.recovered")}`}
             </span>
           </div>
         )}

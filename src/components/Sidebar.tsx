@@ -3,26 +3,34 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useI18n } from "@/lib/i18n";
 
 const tools = [
-  { name: "JSON Formatter", href: "/json-formatter", icon: "{ }" },
-  { name: "Regex Tester", href: "/regex-tester", icon: ".*" },
-  { name: "Color Converter", href: "/color-converter", icon: "◆" },
-  { name: "Base64 Codec", href: "/base64", icon: "b64" },
-  { name: "URL Codec", href: "/url", icon: "%2" },
-  { name: "JWT Decoder", href: "/jwt", icon: "◉" },
-  { name: "Timestamp", href: "/timestamp", icon: "⏱" },
-  { name: "UUID Generator", href: "/uuid", icon: "uid" },
-  { name: "Cron Generator", href: "/cron", icon: "⌁" },
-  { name: "Code Minifier", href: "/minifier", icon: "min" },
-  { name: "Diff Compare", href: "/diff", icon: "±" },
-  { name: "HTTP Status", href: "/http-status", icon: "HTTP" },
-  { name: "Lorem Ipsum", href: "/lorem", icon: "Lip" },
+  { nameKey: "jsonFormatter.title", href: "/json-formatter", icon: "{ }" },
+  { nameKey: "regexTester.title", href: "/regex-tester", icon: ".*" },
+  { nameKey: "colorConverter.title", href: "/color-converter", icon: "◆" },
+  { nameKey: "base64.title", href: "/base64", icon: "b64" },
+  { nameKey: "url.title", href: "/url", icon: "%2" },
+  { nameKey: "jwt.title", href: "/jwt", icon: "◉" },
+  { nameKey: "timestamp.title", href: "/timestamp", icon: "⏱" },
+  { nameKey: "uuid.title", href: "/uuid", icon: "uid" },
+  { nameKey: "cron.title", href: "/cron", icon: "⌁" },
+  { nameKey: "minifier.title", href: "/minifier", icon: "min" },
+  { nameKey: "diff.title", href: "/diff", icon: "±" },
+  { nameKey: "httpStatus.title", href: "/http-status", icon: "HTTP" },
+  { nameKey: "lorem.title", href: "/lorem", icon: "Lip" },
+  { nameKey: "markdown.title", href: "/markdown", icon: "md" },
+  { nameKey: "hash.title", href: "/hash", icon: "#" },
+  { nameKey: "numberBase.title", href: "/number-base", icon: "0x" },
+  { nameKey: "gradient.title", href: "/gradient", icon: "▓" },
+  { nameKey: "charCount.title", href: "/char-count", icon: "Aa" },
+  { nameKey: "htmlEntities.title", href: "/html-entities", icon: "&amp;" },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const { t, locale, setLocale } = useI18n();
 
   return (
     <>
@@ -46,7 +54,7 @@ export default function Sidebar() {
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-semibold tracking-wide text-foreground">
-              DEV TOOLBOX
+              {t("sidebar.title")}
             </span>
             <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
               v2.0.0
@@ -56,7 +64,7 @@ export default function Sidebar() {
 
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <div className="mb-2 px-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
-            Tools
+            {t("sidebar.tools")}
           </div>
           <ul className="space-y-0.5">
             {tools.map((tool) => {
@@ -75,7 +83,7 @@ export default function Sidebar() {
                     <span className="flex h-6 w-6 items-center justify-center rounded-sm bg-surface-raised font-mono text-[11px]">
                       {tool.icon}
                     </span>
-                    <span>{tool.name}</span>
+                    <span>{t(tool.nameKey)}</span>
                   </Link>
                 </li>
               );
@@ -95,13 +103,23 @@ export default function Sidebar() {
             <span className="flex h-6 w-6 items-center justify-center rounded-sm bg-surface-raised font-mono text-[11px]">
               ⌂
             </span>
-            <span>Dashboard</span>
+            <span>{t("sidebar.dashboard")}</span>
           </Link>
+        </div>
+
+        <div className="border-t border-border px-5 py-3 flex items-center justify-between">
+          <button
+            onClick={() => setLocale(locale === "en" ? "zh" : "en")}
+            className="flex items-center gap-2 rounded-sm border border-border bg-surface-raised px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
+          >
+            <span>🌐</span>
+            <span>{t("sidebar.language")}</span>
+          </button>
         </div>
 
         <div className="border-t border-border px-5 py-3">
           <p className="font-mono text-[10px] text-muted">
-            Built with Next.js + Tailwind
+            {t("sidebar.builtWith")}
           </p>
         </div>
       </aside>
