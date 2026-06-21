@@ -22,6 +22,11 @@ const tools = [
   "/gradient",
   "/char-count",
   "/html-entities",
+  "/http-client",
+  "/websocket",
+  "/image-compressor",
+  "/image-converter",
+  "/svg-optimizer",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

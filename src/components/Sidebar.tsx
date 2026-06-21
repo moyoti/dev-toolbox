@@ -26,6 +26,11 @@ const tools = [
   { nameKey: "gradient.title", href: "/gradient", icon: "▓" },
   { nameKey: "charCount.title", href: "/char-count", icon: "Aa" },
   { nameKey: "htmlEntities.title", href: "/html-entities", icon: "&amp;" },
+  { nameKey: "httpClient.title", href: "/http-client", icon: "API" },
+  { nameKey: "websocket.title", href: "/websocket", icon: "WS" },
+  { nameKey: "imageCompressor.title", href: "/image-compressor", icon: "img" },
+  { nameKey: "imageConverter.title", href: "/image-converter", icon: "⇄" },
+  { nameKey: "svgOptimizer.title", href: "/svg-optimizer", icon: "SVG" },
 ];
 
 export default function Sidebar() {

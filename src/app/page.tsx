@@ -23,6 +23,11 @@ const tools = [
   { nameKey: "gradient.title", href: "/gradient", icon: "▓", descKey: "gradient.description" },
   { nameKey: "charCount.title", href: "/char-count", icon: "Aa", descKey: "charCount.description" },
   { nameKey: "htmlEntities.title", href: "/html-entities", icon: "&amp;", descKey: "htmlEntities.description" },
+  { nameKey: "httpClient.title", href: "/http-client", icon: "API", descKey: "httpClient.description" },
+  { nameKey: "websocket.title", href: "/websocket", icon: "WS", descKey: "websocket.description" },
+  { nameKey: "imageCompressor.title", href: "/image-compressor", icon: "img", descKey: "imageCompressor.description" },
+  { nameKey: "imageConverter.title", href: "/image-converter", icon: "⇄", descKey: "imageConverter.description" },
+  { nameKey: "svgOptimizer.title", href: "/svg-optimizer", icon: "SVG", descKey: "svgOptimizer.description" },
 ];
 
 export default function Home() {
