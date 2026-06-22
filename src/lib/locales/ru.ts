@@ -178,6 +178,7 @@ const ru = {
     savings: "Экономия", copy: "Копировать Оптимизированный", download: "Скачать Оптимизированный SVG",
     noInput: "Нет входного SVG", invalidSvg: "Неверный SVG: должен содержать тег <svg>",
   },
+  visitCounter: { globalLabel: "Посетитель", toolLabel: "Пользователь" },
 } as const;
 
 export default ru;

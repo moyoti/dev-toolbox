@@ -178,6 +178,7 @@ const ja = {
     copy: "最適化結果をコピー", download: "最適化SVGをダウンロード",
     noInput: "SVGが入力されていません", invalidSvg: "無効なSVG：<svg>タグが必要です",
   },
+  visitCounter: { globalLabel: "訪問者", toolLabel: "利用者" },
 } as const;
 
 export default ja;

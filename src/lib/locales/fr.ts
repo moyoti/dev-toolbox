@@ -178,6 +178,7 @@ const fr = {
     savings: "Économie", copy: "Copier l'Optimisé", download: "Télécharger SVG Optimisé",
     noInput: "Pas d'entrée SVG", invalidSvg: "SVG invalide : doit contenir la balise <svg>",
   },
+  visitCounter: { globalLabel: "Visiteur", toolLabel: "Utilisateur" },
 } as const;
 
 export default fr;

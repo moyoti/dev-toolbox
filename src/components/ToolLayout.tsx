@@ -1,6 +1,7 @@
 "use client";
 
 import Sidebar from "@/components/Sidebar";
+import VisitCounter from "@/components/VisitCounter";
 import { useI18n } from "@/lib/i18n";
 
 interface ToolLayoutProps {
@@ -10,10 +11,19 @@ interface ToolLayoutProps {
   children: React.ReactNode;
 }
 
+function titleKeyToSlug(titleKey: string): string {
+  const name = titleKey.split(".")[0] || "";
+  return name
+    .replace(/([A-Z])/g, "-$1")
+    .toLowerCase()
+    .replace(/^-/, "");
+}
+
 export default function ToolLayout({ titleKey, icon, descriptionKey, children }: ToolLayoutProps) {
   const { t, locale } = useI18n();
   const title = t(titleKey);
   const description = t(descriptionKey);
+  const toolSlug = titleKeyToSlug(titleKey);
 
   return (
     <div className="flex min-h-screen">
@@ -29,7 +39,10 @@ export default function ToolLayout({ titleKey, icon, descriptionKey, children }:
                 {locale === "zh" ? title : title.toUpperCase()}
               </h1>
             </div>
-            <p className="text-sm text-muted-foreground">{description}</p>
+            <div className="flex items-center gap-3">
+              <p className="text-sm text-muted-foreground">{description}</p>
+              <VisitCounter type="tool" tool={toolSlug} />
+            </div>
             <div className="mt-4 h-px bg-border" />
           </header>
           <div className="space-y-6">{children}</div>

@@ -178,6 +178,7 @@ const ko = {
     copy: "최적화 결과 복사", download: "최적화 SVG 다운로드",
     noInput: "SVG 입력 없음", invalidSvg: "잘못된 SVG: <svg> 태그가 필요합니다",
   },
+  visitCounter: { globalLabel: "방문자", toolLabel: "사용자" },
 } as const;
 
 export default ko;

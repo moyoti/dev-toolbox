@@ -178,6 +178,7 @@ const es = {
     savings: "Ahorro", copy: "Copiar Optimizado", download: "Descargar SVG Optimizado",
     noInput: "Sin entrada SVG", invalidSvg: "SVG inválido: debe contener etiqueta <svg>",
   },
+  visitCounter: { globalLabel: "Visitante", toolLabel: "Usuario" },
 } as const;
 
 export default es;

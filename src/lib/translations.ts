@@ -402,6 +402,10 @@ export const translations = {
       noInput: "No SVG input",
       invalidSvg: "Invalid SVG: must contain <svg> tag",
     },
+    visitCounter: {
+      globalLabel: "Visitor",
+      toolLabel: "User",
+    },
   },
   zh: {
     common: {
@@ -796,6 +800,10 @@ export const translations = {
       download: "下载优化 SVG",
       noInput: "未输入 SVG",
       invalidSvg: "无效 SVG：必须包含 <svg> 标签",
+    },
+    visitCounter: {
+      globalLabel: "访客",
+      toolLabel: "使用者",
     },
   },
   ja,

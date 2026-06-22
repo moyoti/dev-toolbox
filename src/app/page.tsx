@@ -1,6 +1,7 @@
 "use client";
 
 import Sidebar from "@/components/Sidebar";
+import VisitCounter from "@/components/VisitCounter";
 import { useI18n } from "@/lib/i18n";
 
 const tools = [
@@ -92,6 +93,9 @@ export default function Home() {
           </div>
 
           <footer className="mt-16 border-t border-border pt-6 text-center">
+            <div className="mb-4 flex justify-center">
+              <VisitCounter type="global" />
+            </div>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
               {t("home.footer")}
             </p>
